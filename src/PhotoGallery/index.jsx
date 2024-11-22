@@ -54,6 +54,8 @@ const PhotoGallery = () => {
     // Glob para carregar todas as imagens da pasta 'public/photos'
     const images = import.meta.glob("/images/*.jpg", { as: "url" });
 
+    console.log(images);
+
     const groups = {};
 
     Object.keys(images).forEach((path) => {

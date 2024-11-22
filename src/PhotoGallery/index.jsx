@@ -9,13 +9,11 @@ const GalleryWrapper = styled.div`
   align-items: start;
   background-color: black;
   padding-left: 5vw;
-
   h1 {
     font-size: 60px;
     color: white;
   }
-
-  p {
+  p{
     color: white;
   }
 
@@ -25,7 +23,6 @@ const GalleryWrapper = styled.div`
     flex-wrap: wrap;
     justify-content: flex-start;
     align-items: start;
-
     .photo {
       display: flex;
       flex-direction: column;
@@ -33,7 +30,6 @@ const GalleryWrapper = styled.div`
       border: 5px solid black;
       padding: 0px 20px 20px;
       background-color: white;
-
       h2 {
         font-size: 60px;
         margin: 0;
@@ -55,19 +51,14 @@ const PhotoGallery = () => {
   const [selectedPhotos, setSelectedPhotos] = useState([]);
 
   useEffect(() => {
-    // Aqui você pode definir manualmente os caminhos das imagens na pasta public/images
-    const imagePaths = [
-      "/images/1-1.jpg",
-      "/images/1-2.jpg",
-      "/images/2-1.jpg",
-      "/images/2-2.jpg",
-      "/images/3-1.jpg",
-      // Adicione mais imagens conforme necessário
-    ];
+    // Glob para carregar todas as imagens da pasta 'public/photos'
+    const images = import.meta.glob("/images/*.jpg", { as: "url" });
+
+    console.log(images);
 
     const groups = {};
 
-    imagePaths.forEach((path) => {
+    Object.keys(images).forEach((path) => {
       const fileName = path.split("/").pop(); // Exemplo: "1-1.jpg"
       const [group, index] = fileName.split("-"); // ["1", "1"]
       const groupKey = parseInt(group, 10);
@@ -76,15 +67,16 @@ const PhotoGallery = () => {
       groups[groupKey].push({ path, index: parseInt(index, 10) });
     });
 
-    // Organizar as fotos dentro de cada grupo por índice
-    const formattedGroups = Object.entries(groups).map(([groupKey, photos]) => ({
-      group: groupKey,
-      photos: photos
-        .sort((a, b) => a.index - b.index)
-        .map((photo) => photo.path),
-    }));
+    // Ordenar as fotos dentro de cada grupo por índice
+    const formattedGroups = Object.entries(groups).map(([groupKey, photos]) => {
+      return {
+        group: groupKey,
+        photos: photos
+          .sort((a, b) => a.index - b.index)
+          .map((photo) => photo.path),
+      };
+    });
 
-    // Atualizar o estado com os grupos de fotos
     setPhotoGroups(formattedGroups);
   }, []);
 
@@ -96,6 +88,7 @@ const PhotoGallery = () => {
   return (
     <>
       <GalleryWrapper>
+
         <h1>
           GRAVURAS &<br /> PINTURAS
         </h1>
@@ -118,7 +111,6 @@ const PhotoGallery = () => {
           })}
         </div>
       </GalleryWrapper>
-
       {isModalOpen && (
         <Modal photos={selectedPhotos} onClose={() => setIsModalOpen(false)} />
       )}

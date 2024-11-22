@@ -51,7 +51,7 @@ const PhotoGallery = () => {
   const [selectedPhotos, setSelectedPhotos] = useState([]);
 
  useEffect(() => {
-  const images = import.meta.glob("../src/assets/images/*.jpg", {eager: true});
+  const images = import.meta.glob("/images/*.jpg", {eager: true});
   
   // Resolve os caminhos das imagens e os exibe
   Promise.all(

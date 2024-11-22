@@ -50,41 +50,41 @@ const PhotoGallery = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPhotos, setSelectedPhotos] = useState([]);
 
-  useEffect(() => {
-    const images = import.meta.glob("/images/*.jpg", { as: "url" });
-    
-    // Resolve os caminhos das imagens e os exibe
-    Promise.all(
-      Object.entries(images).map(async ([path, resolver]) => {
-        const url = await resolver(); // Resolve a promessa para obter o URL
-        console.log(`Path: ${path}, URL: ${url}`);
-        return { path, url };
-      })
-    ).then((resolvedImages) => {
-      console.log("Resolved Images:", resolvedImages);
-    });
+ useEffect(() => {
+  const images = import.meta.glob("../src/assets/images/*.jpg", { as: "url" });
   
-    // Processa os grupos (mantendo sua lógica)
-    const groups = {};
-    Object.keys(images).forEach((path) => {
-      const fileName = path.split("/").pop();
-      const [group, index] = fileName.split("-");
-      const groupKey = parseInt(group, 10);
-  
-      if (!groups[groupKey]) groups[groupKey] = [];
-      groups[groupKey].push({ path, index: parseInt(index, 10) });
-    });
-  
-    const formattedGroups = Object.entries(groups).map(([groupKey, photos]) => {
-      return {
-        group: groupKey,
-        photos: photos.sort((a, b) => a.index - b.index).map((photo) => photo.path),
-      };
-    });
-  
-    setPhotoGroups(formattedGroups);
-  }, []);
-  
+  // Resolve os caminhos das imagens e os exibe
+  Promise.all(
+    Object.entries(images).map(async ([path, resolver]) => {
+      const url = await resolver(); // Resolve a promessa para obter o URL
+      console.log(`Path: ${path}, URL: ${url}`);
+      return { path, url };
+    })
+  ).then((resolvedImages) => {
+    console.log("Resolved Images:", resolvedImages);
+  });
+
+  // Processa os grupos (mantendo sua lógica)
+  const groups = {};
+  Object.keys(images).forEach((path) => {
+    const fileName = path.split("/").pop();
+    const [group, index] = fileName.split("-");
+    const groupKey = parseInt(group, 10);
+
+    if (!groups[groupKey]) groups[groupKey] = [];
+    groups[groupKey].push({ path, index: parseInt(index, 10) });
+  });
+
+  const formattedGroups = Object.entries(groups).map(([groupKey, photos]) => {
+    return {
+      group: groupKey,
+      photos: photos.sort((a, b) => a.index - b.index).map((photo) => photo.path),
+    };
+  });
+
+  setPhotoGroups(formattedGroups);
+}, []);
+
 
   const openModal = (photos) => {
     setSelectedPhotos(photos);

@@ -55,22 +55,19 @@ const PhotoGallery = () => {
   const [selectedPhotos, setSelectedPhotos] = useState([]);
 
   useEffect(() => {
-    // Carregar todas as imagens da pasta 'public/images'
-    const images = import.meta.glob("/images/*.jpg", { as: "url" });
-
-    // Verificando se as imagens estão sendo carregadas corretamente
-    console.log("Images Object:", images);
-
-    // Se o glob não encontrar nenhuma imagem, retorne imediatamente
-    if (Object.keys(images).length === 0) {
-      console.log("Nenhuma imagem encontrada.");
-      return;
-    }
+    // Aqui você pode definir manualmente os caminhos das imagens na pasta public/images
+    const imagePaths = [
+      "/images/1-1.jpg",
+      "/images/1-2.jpg",
+      "/images/2-1.jpg",
+      "/images/2-2.jpg",
+      "/images/3-1.jpg",
+      // Adicione mais imagens conforme necessário
+    ];
 
     const groups = {};
 
-    // Iterar sobre as imagens e agrupar por nome
-    Object.keys(images).forEach((path) => {
+    imagePaths.forEach((path) => {
       const fileName = path.split("/").pop(); // Exemplo: "1-1.jpg"
       const [group, index] = fileName.split("-"); // ["1", "1"]
       const groupKey = parseInt(group, 10);

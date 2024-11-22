@@ -5,6 +5,6 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   build: {
-    assetsDir: 'assets', // Especifica onde os arquivos estáticos serão colocados no build
+    assetsInclude: ["**/*.jpg", "**/*.png"], // Especifica onde os arquivos estáticos serão colocados no build
   },
 })

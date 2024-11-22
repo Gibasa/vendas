@@ -52,7 +52,7 @@ const PhotoGallery = () => {
 
   useEffect(() => {
     // Glob para carregar todas as imagens da pasta 'public/photos'
-    const images = import.meta.glob("/public/images/*.jpg", { as: "url" });
+    const images = import.meta.glob("/images/*.jpg", { as: "url" });
 
     const groups = {};
 

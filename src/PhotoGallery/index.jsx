@@ -51,34 +51,40 @@ const PhotoGallery = () => {
   const [selectedPhotos, setSelectedPhotos] = useState([]);
 
   useEffect(() => {
-    // Glob para carregar todas as imagens da pasta 'public/photos'
     const images = import.meta.glob("/images/*.jpg", { as: "url" });
-
-    console.log(images);
-
+    
+    // Resolve os caminhos das imagens e os exibe
+    Promise.all(
+      Object.entries(images).map(async ([path, resolver]) => {
+        const url = await resolver(); // Resolve a promessa para obter o URL
+        console.log(`Path: ${path}, URL: ${url}`);
+        return { path, url };
+      })
+    ).then((resolvedImages) => {
+      console.log("Resolved Images:", resolvedImages);
+    });
+  
+    // Processa os grupos (mantendo sua lógica)
     const groups = {};
-
     Object.keys(images).forEach((path) => {
-      const fileName = path.split("/").pop(); // Exemplo: "1-1.jpg"
-      const [group, index] = fileName.split("-"); // ["1", "1"]
+      const fileName = path.split("/").pop();
+      const [group, index] = fileName.split("-");
       const groupKey = parseInt(group, 10);
-
+  
       if (!groups[groupKey]) groups[groupKey] = [];
       groups[groupKey].push({ path, index: parseInt(index, 10) });
     });
-
-    // Ordenar as fotos dentro de cada grupo por índice
+  
     const formattedGroups = Object.entries(groups).map(([groupKey, photos]) => {
       return {
         group: groupKey,
-        photos: photos
-          .sort((a, b) => a.index - b.index)
-          .map((photo) => photo.path),
+        photos: photos.sort((a, b) => a.index - b.index).map((photo) => photo.path),
       };
     });
-
+  
     setPhotoGroups(formattedGroups);
   }, []);
+  
 
   const openModal = (photos) => {
     setSelectedPhotos(photos);

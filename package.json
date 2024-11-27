@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "generate-images-json": "node generate.js",
-    "dev": "npm run generate-images-json && vite",
-    "build": "npm run generate-images-json && vite build",
+    "dev": "vite",
+    "build": "npm run vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
